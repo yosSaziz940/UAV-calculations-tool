@@ -49,7 +49,7 @@ export default function SectionF({ inputs }) {
       const UAVsPerLocation = annualFlightsPerLocation; // same as Excel formula
 
       const totalFlightsForType = annualFlightsPerLocation * UAV_Locations;
-      const totalUAVsForType = UAVsPerLocation * UAV_Locations;
+    // const totalUAVsForType = UAVsPerLocation * UAV_Locations;
 
       totalFlights += totalFlightsForType;
       totalUAVs += UAV_Locations;
@@ -197,3 +197,4 @@ export default function SectionF({ inputs }) {
     </section>
   );
 }
+
