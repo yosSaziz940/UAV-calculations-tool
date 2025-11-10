@@ -46,7 +46,7 @@ export default function SectionF({ inputs }) {
       const kmPerLocation = type.km / UAV_Locations;
 
       const annualFlightsPerLocation = Math.ceil(kmPerLocation / coveredLinearPathPerFlight) * type.coverageTimesPerYear;
-      const UAVsPerLocation = annualFlightsPerLocation; // same as Excel formula
+      // const UAVsPerLocation = annualFlightsPerLocation; // same as Excel formula
 
       const totalFlightsForType = annualFlightsPerLocation * UAV_Locations;
     // const totalUAVsForType = UAVsPerLocation * UAV_Locations;
@@ -197,4 +197,5 @@ export default function SectionF({ inputs }) {
     </section>
   );
 }
+
 
