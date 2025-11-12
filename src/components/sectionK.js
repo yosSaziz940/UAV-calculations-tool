@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const KSectionCalculations = ({
+const SectionK = ({
   flightsBase = {},
   flightsUpperSource = {},
   uavsBase = {},
@@ -60,7 +60,7 @@ const KSectionCalculations = ({
       { label: "Upper Bound", frac: 1 },
     ];
 
-    const rows = steps.map(({ label, frac }) => {
+    return steps.map(({ label, frac }) => {
       const small = lower.small + frac * range.small;
       const medium = lower.medium + frac * range.medium;
       const large = lower.large + frac * range.large;
@@ -72,18 +72,11 @@ const KSectionCalculations = ({
         total: Math.round(small + medium + large),
       };
     });
-
-    return rows;
   };
 
-  const flightsRows = useMemo(
-    () => generateTable(flightsBase, flightsUpperSource),
-    [flightsBase, flightsUpperSource]
-  );
-  const uavsRows = useMemo(
-    () => generateTable(uavsBase, uavsUpperSource),
-    [uavsBase, uavsUpperSource]
-  );
+  // ✅ Directly compute rows (no useMemo)
+  const flightsRows = generateTable(flightsBase, flightsUpperSource);
+  const uavsRows = generateTable(uavsBase, uavsUpperSource);
 
   const fmt = (n) => (isFinite(n) ? n.toLocaleString() : "-");
 
@@ -165,7 +158,14 @@ const KSectionCalculations = ({
         Volume Estimates for Year 2049
       </p>
 
-      <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 24,
+        }}
+      >
         {renderChart("Annual Flights", flightsRows)}
         {renderChart("Annual UAVs", uavsRows)}
       </div>
@@ -173,4 +173,4 @@ const KSectionCalculations = ({
   );
 };
 
-export default KSectionCalculations;
+export default SectionK;
