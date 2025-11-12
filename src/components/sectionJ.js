@@ -11,7 +11,7 @@ export default function SectionJ() {
     { key: "emergency", name: "Emergency Response", small: 0.5, medium: 0.4, lowerFlights: 18100, upperFlights: 181000, flightsPerUAV: 236 },
   ];
 
-  const [rows, setRows] = useState(initial);
+  const [rows] = useState(initial);
   const [otherFraction] = useState(0.001);
 
   // const updateCell = (index, field, value) => {
@@ -142,4 +142,5 @@ export default function SectionJ() {
     </section>
   );
 }
+
 
