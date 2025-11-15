@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 export default function SectionD({ inputs }) {
   const [dData, setDData] = useState({
     totalAnnualVehicleTrips: 7800000000,
@@ -18,7 +19,7 @@ export default function SectionD({ inputs }) {
   };
 
   const handleCalculate = () => {
-    const { 
+    const {
       totalAnnualVehicleTrips,
       vehicleSharePctLower,
       vehicleSharePctUpper,
@@ -83,12 +84,12 @@ export default function SectionD({ inputs }) {
 
       {results && (
         <ul className="results">
-          <li>Annual Vehicle Share Trips - Lower: {results.vehicleShareLower.toLocaleString()}</li>
-          <li>Annual Vehicle Share Trips - Upper: {results.vehicleShareUpper.toLocaleString()}</li>
-          <li>Annual UAV Flights - Lower: {results.annualUAVFlightsLower.toLocaleString()}</li>
-          <li>Annual UAV Flights - Upper: {results.annualUAVFlightsUpper.toLocaleString()}</li>
-          <li>Annual UAVs - Lower: {results.annualUAVsLower.toFixed(2)}</li>
-          <li>Annual UAVs - Upper: {results.annualUAVsUpper.toFixed(2)}</li>
+          <li><strong>Annual Vehicle Share Trips - Lower:</strong> {results.vehicleShareLower.toLocaleString()}</li>
+          <li><strong>Annual Vehicle Share Trips - Upper:</strong> {results.vehicleShareUpper.toLocaleString()}</li>
+          <li><strong>Annual UAV Flights - Lower:</strong> {results.annualUAVFlightsLower.toLocaleString()}</li>
+          <li><strong>Annual UAV Flights - Upper:</strong> {results.annualUAVFlightsUpper.toLocaleString()}</li>
+          <li><strong>Annual UAVs - Lower:</strong> {results.annualUAVsLower.toFixed(2)}</li>
+          <li><strong>Annual UAVs - Upper:</strong> {results.annualUAVsUpper.toFixed(2)}</li>
         </ul>
       )}
     </section>
