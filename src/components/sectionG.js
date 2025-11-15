@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 export default function SectionG({ inputs }) {
   const [data, setData] = useState({
     types: [
@@ -8,9 +9,9 @@ export default function SectionG({ inputs }) {
       { name: "Annual Residential Unit Construction", structures: 29200, coverageTimesPerYear: 4 },
       { name: "Annual Non-Residential Construction", structures: 2920, coverageTimesPerYear: 48 },
     ],
-    maxStructuresPerUAV: 336, // C$50
-    coverageStructuresPerFlight: 1, // C$26
-    uavFlightsPerYear: 672, // C$39
+    maxStructuresPerUAV: 336, 
+    coverageStructuresPerFlight: 1, 
+    uavFlightsPerYear: 672, 
     uavCapacityPctLower: 5,
     uavCapacityPctUpper: 50,
   });
