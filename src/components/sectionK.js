@@ -74,7 +74,7 @@ const SectionK = ({
     });
   };
 
-  // ✅ Directly compute rows (no useMemo)
+ 
   const flightsRows = generateTable(flightsBase, flightsUpperSource);
   const uavsRows = generateTable(uavsBase, uavsUpperSource);
 
