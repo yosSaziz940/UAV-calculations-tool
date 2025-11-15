@@ -1,11 +1,11 @@
-
 import { useState } from "react";
+
 
 export default function SectionH({ inputs }) {
   const [emergencyData, setEmergencyData] = useState({
     impactedArea: 10000,
     annualEvents: 10,
-    avgEventServedPct: 0.5, 
+    avgEventServedPct: 0.5,
     coverage: [
       { name: "Search and Rescue", percent: 0.05, timesPerEvent: 1, dailyFlights: 16, dailyArea: 1, daysToFull: 2 },
       { name: "Cellular Connectivity", percent: 0.2, timesPerEvent: 1, dailyFlights: 16, dailyArea: 10, daysToFull: 2 },
@@ -58,8 +58,7 @@ export default function SectionH({ inputs }) {
         totalUAVs
       };
     });
-    const totalFlight=totalFlightsAll
-    const totalUAVs=totalUAVsAll
+
     const totalFlightsMax = totalFlightsAll * annualEvents;
     const totalUAVsMax = totalUAVsAll / avgEventServedPct;
     const annualFlightsLower = totalFlightsMax * (uavCapacityPctLower / 100);
@@ -71,8 +70,8 @@ export default function SectionH({ inputs }) {
       ...prev,
       results: {
         coverageResults,
-        totalFlight,
-        totalUAVs,
+        totalFlight: totalFlightsAll,
+        totalUAVs: totalUAVsAll,
         totalFlightsMax,
         totalUAVsMax,
         annualFlightsLower,
@@ -149,27 +148,43 @@ export default function SectionH({ inputs }) {
       </button>
 
       {results && (
-        <div className="mt-4 p-4 border rounded bg-white shadow">
-          <h3 className="font-semibold mb-2">Results</h3>
-          <ul className="text-sm space-y-1">
-            {results.coverageResults.map((res, idx) => (
-              <li key={idx}>
-                <strong>{res.name}</strong> — Total Coverage %: {(res.totalCoveragePercent * 100).toFixed(2)}%, Total Coverage Area: {res.totalCoverageArea.toFixed(2)} km², Average Area per Flight: {res.avgAreaPerFlight.toFixed(2)} km², Total Flights: {res.totalFlights.toFixed(0)}, Total UAVs: {res.totalUAVs}
-              </li>
-            ))}
-          </ul>
+        <div className="mt-4 border rounded p-4 bg-white shadow">
+          <h3 className="font-semibold mb-2">Coverage Results</h3>
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr>
+                <th className="border p-1">Type</th>
+                <th className="border p-1">Total Coverage %</th>
+                <th className="border p-1">Total Coverage Area (km²)</th>
+                <th className="border p-1">Average Area per Flight (km²)</th>
+                <th className="border p-1">Total Flights</th>
+                <th className="border p-1">Total UAVs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.coverageResults.map((res, idx) => (
+                <tr key={idx}>
+                  <td className="border p-1">{res.name}</td>
+                  <td className="border p-1">{(res.totalCoveragePercent * 100).toFixed(2)}%</td>
+                  <td className="border p-1">{res.totalCoverageArea.toFixed(2)}</td>
+                  <td className="border p-1">{res.avgAreaPerFlight.toFixed(2)}</td>
+                  <td className="border p-1">{res.totalFlights.toFixed(0)}</td>
+                  <td className="border p-1">{res.totalUAVs}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-          <ul className="mt-2 text-sm space-y-1">
-            <li>Total Flights: {results.totalFlight}</li>
-            <li>Total UAVs: {results.totalUAVs}</li>
-
-            <li>Total Flights (UAV Maximum Capacity): {results.totalFlightsMax.toFixed(0)}</li>
-            <li>Total UAVs (UAV Maximum Capacity): {results.totalUAVsMax.toFixed(0)}</li>
-            <li>Annual UAV Flights - Lower: {results.annualFlightsLower.toFixed(0)}</li>
-            <li>Annual UAV Flights - Upper: {results.annualFlightsUpper.toFixed(0)}</li>
-            <li>Annual UAVs - Lower: {results.annualUAVsLower.toFixed(0)}</li>
-            <li>Annual UAVs - Upper: {results.annualUAVsUpper.toFixed(0)}</li>
-          </ul>
+          <div className="mt-4 text-sm">
+            <p><strong>Total Flights:</strong> {results.totalFlight}</p>
+            <p><strong>Total UAVs:</strong> {results.totalUAVs}</p>
+            <p><strong>Total Flights (UAV Maximum Capacity):</strong> {results.totalFlightsMax.toFixed(0)}</p>
+            <p><strong>Total UAVs (UAV Maximum Capacity):</strong> {results.totalUAVsMax.toFixed(0)}</p>
+            <p><strong>Annual UAV Flights - Lower:</strong> {results.annualFlightsLower.toFixed(0)}</p>
+            <p><strong>Annual UAV Flights - Upper:</strong> {results.annualFlightsUpper.toFixed(0)}</p>
+            <p><strong>Annual UAVs - Lower:</strong> {results.annualUAVsLower.toFixed(0)}</p>
+            <p><strong>Annual UAVs - Upper:</strong> {results.annualUAVsUpper.toFixed(0)}</p>
+          </div>
         </div>
       )}
     </section>
