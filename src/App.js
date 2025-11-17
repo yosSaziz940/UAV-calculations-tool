@@ -12,7 +12,7 @@ import SectionJ from "./components/sectionJ";
 import SectionK from "./components/sectionK";
 
 function App() {
-  const [activeSection, setActiveSection] = useState("A");
+  const [activeSection, setActiveSection] = useState("A. General Inputs");
   
   const [inputs, setInputs] = useState({
     year: 2049,
@@ -35,27 +35,37 @@ function App() {
 
   return (
     <div className="dashboard">
+     
       <aside className="sidebar">
-        <h2>Sections</h2>
-        {["A","B","C","D","E","F","G","H","I","J","K"].map(sec => (
-          <button key={sec} onClick={() => setActiveSection(sec)}>
-            {`Section ${sec}`}
+        <div className="sidebar-logo">
+    <img src="./icon.svg" alt="SkyTrade Logo" />
+  </div>
+        <h2>UAV Volume Tool</h2>
+        {["A. General Inputs","B. Recreational Use","C. Commercial Delivery Use",
+        "D. Urban Air Mobility","E. Agriculture Use","F. Linear Inspection","G. Structure Inspection",
+        "H. Emergency Response","I. Other","J. Distributions by Vehicle Type","K. Chart Calculations"].map(sec => (
+          <button 
+            key={sec} 
+            className={activeSection === sec ? "active" : ""}
+            onClick={() => setActiveSection(sec)}
+          >
+            {sec}
           </button>
         ))}
       </aside>
 
       <main className="content">
-        {activeSection === "A" && <SectionA inputs={inputs} setInputs={setInputs} />}
-        {activeSection === "B" && <SectionB inputs={inputs} />}
-        {activeSection === "C" && <SectionC inputs={inputs} />}
-        {activeSection === "D" && <SectionD inputs={inputs} />}
-        {activeSection === "E" && <SectionE inputs={inputs} />}
-        {activeSection === "F" && <SectionF inputs={inputs} />}
-        {activeSection === "G" && <SectionG inputs={inputs} />}
-        {activeSection === "H" && <SectionH inputs={inputs} />}
-        {activeSection === "I" && <SectionI inputs={inputs} />}
-        {activeSection === "J" && <SectionJ inputs={inputs} />}
-        {activeSection === "K" && <SectionK flightsBase={{
+        {activeSection === "A. General Inputs" && <SectionA inputs={inputs} setInputs={setInputs} />}
+        {activeSection === "B. Recreational Use" && <SectionB inputs={inputs} />}
+        {activeSection === "C. Commercial Delivery Use" && <SectionC inputs={inputs} />}
+        {activeSection === "D. Urban Air Mobility" && <SectionD inputs={inputs} />}
+        {activeSection === "E. Agriculture Use" && <SectionE inputs={inputs} />}
+        {activeSection === "F. Linear Inspection" && <SectionF inputs={inputs} />}
+        {activeSection === "G. Structure Inspection" && <SectionG inputs={inputs} />}
+        {activeSection === "H. Emergency Response" && <SectionH inputs={inputs} />}
+        {activeSection === "I. Other" && <SectionI inputs={inputs} />}
+        {activeSection === "J. Distributions by Vehicle Type" && <SectionJ inputs={inputs} />}
+        {activeSection === "K. Chart Calculations" && <SectionK flightsBase={{
     small: 750000,
     medium: 7500000,
     large: 22500000,
