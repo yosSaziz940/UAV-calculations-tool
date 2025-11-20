@@ -68,7 +68,7 @@ body, html {
 .sidebar button:focus {
   outline: none;
   color: #ffffff;
-  background: linear-gradient(135deg, #1e4bb8 0%, #3b82f6 100%);/
+  background: linear-gradient(135deg, #1e4bb8 0%, #3b82f6 100%);
   box-shadow: 0 0 10px 4px rgba(59, 130, 246, 0.7); 
   transform: translateX(3px); 
 }
