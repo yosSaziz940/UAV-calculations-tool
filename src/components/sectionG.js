@@ -11,7 +11,7 @@ export default function SectionG({ inputs }) {
     ],
     maxStructuresPerUAV: 336, 
     coverageStructuresPerFlight: 1, 
-    uavFlightsPerYear: 672, 
+    uavFlightsPerYear: 675, 
     uavCapacityPctLower: 5,
     uavCapacityPctUpper: 50,
   });
@@ -89,78 +89,78 @@ export default function SectionG({ inputs }) {
   };
 
   return (
-    <section className="card p-4">
-      <h2 className="text-lg font-bold mb-2">G. Structures & Construction Monitoring</h2>
+    <section className="card">
+      <h2>G. Structures & Construction Monitoring</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+      <div>
         {data.types.map((type, index) => (
-          <div key={index} className="border rounded p-2 bg-gray-50">
-            <h3 className="font-semibold text-sm mb-1">{type.name}</h3>
-            <label className="flex flex-col text-xs">
+          <div key={index} >
+            <h3>{type.name}</h3>
+            <label>
               Structures
               <input
                 type="number"
                 value={type.structures}
                 onChange={e => handleChange(index, "structures", e.target.value)}
-                className="border rounded p-1 text-xs"
+                
               />
             </label>
-            <label className="flex flex-col text-xs mt-1">
+            <label >
               Coverage Times per Year
               <input
                 type="number"
                 value={type.coverageTimesPerYear}
                 onChange={e => handleChange(index, "coverageTimesPerYear", e.target.value)}
-                className="border rounded p-1 text-xs"
+                
               />
             </label>
           </div>
         ))}
 
-        <div className="border rounded p-2 bg-gray-50">
-          <label className="flex flex-col text-xs mt-1">
-            Maximum Annual Structures per UAV (C$50)
+        <div >
+          <label >
+            Maximum Annual Structures per UAV
             <input
               type="number"
               value={data.maxStructuresPerUAV}
               onChange={e => handleGlobalChange("maxStructuresPerUAV", e.target.value)}
-              className="border rounded p-1 text-xs"
+              
             />
           </label>
-          <label className="flex flex-col text-xs mt-1">
-            Coverage Structures per Flight (C$26)
+          <label >
+            Coverage Structures per Flight
             <input
               type="number"
               value={data.coverageStructuresPerFlight}
               onChange={e => handleGlobalChange("coverageStructuresPerFlight", e.target.value)}
-              className="border rounded p-1 text-xs"
+             
             />
           </label>
-          <label className="flex flex-col text-xs mt-1">
-            UAV Flights per Year (C$39)
+          <label >
+            UAV Flights per Year
             <input
               type="number"
               value={data.uavFlightsPerYear}
               onChange={e => handleGlobalChange("uavFlightsPerYear", e.target.value)}
-              className="border rounded p-1 text-xs"
+             
             />
           </label>
-          <label className="flex flex-col text-xs mt-1">
-            UAV % of Max Capacity – Lower
+          <label >
+            UAV % of Max Capacity - Lower
             <input
               type="number"
               value={data.uavCapacityPctLower}
               onChange={e => handleGlobalChange("uavCapacityPctLower", e.target.value)}
-              className="border rounded p-1 text-xs"
+             
             />
           </label>
-          <label className="flex flex-col text-xs mt-1">
-            UAV % of Max Capacity – Upper
+          <label>
+            UAV % of Max Capacity - Upper
             <input
               type="number"
               value={data.uavCapacityPctUpper}
               onChange={e => handleGlobalChange("uavCapacityPctUpper", e.target.value)}
-              className="border rounded p-1 text-xs"
+             
             />
           </label>
         </div>
@@ -168,43 +168,43 @@ export default function SectionG({ inputs }) {
 
       <button
         onClick={handleCalculate}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+       
       >
         Calculate
       </button>
 
       {results && (
-        <div className="mt-4 border rounded p-4 bg-white shadow">
-          <h3 className="font-semibold text-base mb-2">Results</h3>
+        <div>
+          <h3>Results</h3>
 
-          <table className="w-full text-sm border-collapse">
+          <table>
             <thead>
-              <tr className="bg-gray-100">
-                <th className="border px-2 py-1">Type</th>
-                <th className="border px-2 py-1">UAV Locations</th>
-                <th className="border px-2 py-1">Structures per Location</th>
-                <th className="border px-2 py-1">Annual Flights/Loc</th>
-                <th className="border px-2 py-1">Total Flights</th>
-                <th className="border px-2 py-1">UAVs/Loc</th>
-                <th className="border px-2 py-1">Total UAVs</th>
+              <tr>
+                <th>Type</th>
+                <th>UAV Locations</th>
+                <th>Structures per Location</th>
+                <th>Annual Flights/Loc</th>
+                <th>Total Flights</th>
+                <th>UAVs/Loc</th>
+                <th>Total UAVs</th>
               </tr>
             </thead>
             <tbody>
               {results.typeResults.map((res, idx) => (
                 <tr key={idx}>
-                  <td className="border px-2 py-1">{res.name}</td>
-                  <td className="border px-2 py-1 text-center">{res.uavLocations}</td>
-                  <td className="border px-2 py-1 text-center">{res.kmPerLocation.toFixed(2)}</td>
-                  <td className="border px-2 py-1 text-center">{res.annualFlightsPerLocation}</td>
-                  <td className="border px-2 py-1 text-center">{res.totalAnnualFlights}</td>
-                  <td className="border px-2 py-1 text-center">{res.uavsPerLocation}</td>
-                  <td className="border px-2 py-1 text-center">{res.totalUAVsForType}</td>
+                  <td>{res.name}</td>
+                  <td>{res.uavLocations}</td>
+                  <td>{res.kmPerLocation.toFixed(2)}</td>
+                  <td>{res.annualFlightsPerLocation}</td>
+                  <td>{res.totalAnnualFlights}</td>
+                  <td>{res.uavsPerLocation}</td>
+                  <td>{res.totalUAVsForType}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <div className="mt-4 text-sm">
+          <div>
             <p><strong>Total UAV Flights:</strong> {results.totalFlights.toFixed(0)}</p>
             <p><strong>Total UAVs:</strong> {results.totalUAVs.toFixed(0)}</p>
             <p><strong>Annual Flights per UAV:</strong> {results.annualFlightsPerUAV.toFixed(1)}</p>
