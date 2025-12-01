@@ -10,10 +10,12 @@ import SectionH from "./components/sectionH";
 import SectionI from "./components/sectionI";
 import SectionJ from "./components/sectionJ";
 import SectionK from "./components/sectionK";
+import FinancialImpactModule from "./components/FinancialImpactModule";
+import InfrastructureFiscalModule from "./components/InfrastructureFiscalModule";
 
 function App() {
   const [activeSection, setActiveSection] = useState("A. General Inputs");
-  
+
   const [inputs, setInputs] = useState({
     year: 2049,
     population: 6500000,
@@ -32,17 +34,22 @@ function App() {
     avgEventServedPct: 50
   });
 
+
+
   return (
     <div className="dashboard">
-     
       <aside className="sidebar">
         <div className="sidebar-logo">
-    <img src="./icon.svg" alt="SkyTrade Logo" />
-  </div>
+          <img src="./icon.svg" alt="SkyTrade Logo" />
+        </div>
         <h2>UAV Volume Tool</h2>
-        {["A. General Inputs","B. Recreational Use","C. Commercial Delivery Use",
-        "D. Urban Air Mobility","E. Agriculture Use","F. Linear Inspection","G. Structure Inspection",
-        "H. Emergency Response","I. Other","J. Distributions by Vehicle Type","K. Chart Calculations"].map(sec => (
+        {[
+          "A. General Inputs","B. Recreational Use","C. Commercial Delivery Use",
+          "D. Urban Air Mobility","E. Agriculture Use","F. Linear Inspection",
+          "G. Structure Inspection","H. Emergency Response","I. Other",
+          "J. Distributions by Vehicle Type","K. Chart Calculations",
+          "L. FinancialImpactModule", "M. InfrastructureFiscalModule"
+        ].map(sec => (
           <button 
             key={sec} 
             className={activeSection === sec ? "active" : ""}
@@ -64,31 +71,15 @@ function App() {
         {activeSection === "H. Emergency Response" && <SectionH inputs={inputs} />}
         {activeSection === "I. Other" && <SectionI inputs={inputs} />}
         {activeSection === "J. Distributions by Vehicle Type" && <SectionJ inputs={inputs} />}
-        {activeSection === "K. Chart Calculations" && <SectionK flightsBase={{
-    small: 750000,
-    medium: 7500000,
-    large: 22500000,
-  }}
-  flightsUpperSource={{
-    small: 2500000,
-    medium: 25000000,
-    large: 275000000,
-  }}
-  uavsBase={{
-    small: 25000,
-    medium: 25000,
-    large: 2500,
-  }}
-  uavsUpperSource={{
-    small: 87500,
-    medium: 100000,
-    large: 42500,
-  }}
-/>}
- 
-  
+        {activeSection === "K. Chart Calculations" && <SectionK />}
+        {activeSection === "L. FinancialImpactModule" && 
+        
+        <FinancialImpactModule 
+        />}
 
-      
+        {activeSection === "M. InfrastructureFiscalModule" &&
+        <InfrastructureFiscalModule 
+        />}
       </main>
     </div>
   );
