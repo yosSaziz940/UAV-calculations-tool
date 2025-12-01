@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 
 export default function SectionI() {
   const [inputs, setInputs] = useState({
@@ -11,6 +11,8 @@ export default function SectionI() {
     emergency: { lower: 18100, upper: 181000, perUAV: 236 },
     otherPct: 0.001, // 0.10% as decimal
   });
+
+  const [showResults, setShowResults] = useState(false);
 
   const handleChange = (section, field, value) => {
     setInputs(prev => ({
@@ -30,11 +32,9 @@ export default function SectionI() {
       "emergency",
     ];
 
-
     const sumLower = sections.reduce((acc, s) => acc + inputs[s].lower, 0);
     const sumUpper = sections.reduce((acc, s) => acc + inputs[s].upper, 0);
 
-  
     const otherLower = (inputs.otherPct * sumLower) / (1 - inputs.otherPct);
     const otherUpper = (inputs.otherPct * sumUpper) / (1 - inputs.otherPct);
     const otherPerUAV = Math.round(
@@ -74,83 +74,92 @@ export default function SectionI() {
     return results;
   };
 
-  const results = computeTotals();
+  const handleCalculate = () => setShowResults(true);
 
   return (
-    <section className="card p-4">
-      <h2 className="text-xl font-semibold mb-4">I. Annual UAV Flights Summary</h2>
+    <section className="card">
+      <h2>I. Annual UAV Flights Summary</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="grid">
         {Object.keys(inputs).map(key =>
           key !== "otherPct" ? (
-            <div key={key} className="border p-2 rounded">
-              <h3 className="font-semibold">{key.charAt(0).toUpperCase() + key.slice(1)}</h3>
-              <label className="flex flex-col text-xs mt-1">
+            <div key={key}>
+              <h3>{key.charAt(0).toUpperCase() + key.slice(1)}</h3>
+              <label >
                 Lower Bound
                 <input
                   type="number"
                   value={inputs[key].lower}
                   onChange={e => handleChange(key, "lower", e.target.value)}
-                  className="border rounded p-1 text-xs"
+                 
                 />
               </label>
-              <label className="flex flex-col text-xs mt-1">
+              <label >
                 Upper Bound
                 <input
                   type="number"
                   value={inputs[key].upper}
                   onChange={e => handleChange(key, "upper", e.target.value)}
-                  className="border rounded p-1 text-xs"
+                 
                 />
               </label>
-              <label className="flex flex-col text-xs mt-1">
+              <label >
                 Flights per UAV
                 <input
                   type="number"
                   value={inputs[key].perUAV}
                   onChange={e => handleChange(key, "perUAV", e.target.value)}
-                  className="border rounded p-1 text-xs"
+                 
                 />
               </label>
             </div>
           ) : (
-            <div key={key} className="border p-2 rounded">
-              <h3 className="font-semibold">Other %</h3>
+            <div key={key}>
+              <h3>Other %</h3>
               <input
                 type="number"
                 value={inputs.otherPct * 100}
                 onChange={e => setInputs(prev => ({ ...prev, otherPct: parseFloat(e.target.value) / 100 }))}
-                className="border rounded p-1 text-xs"
+             
               />
             </div>
           )
         )}
       </div>
 
-      <table className="min-w-full border-collapse border border-gray-300 text-sm">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border px-2 py-1">Category</th>
-            <th className="border px-2 py-1">Lower Bound</th>
-            <th className="border px-2 py-1">% of Total</th>
-            <th className="border px-2 py-1">Upper Bound</th>
-            <th className="border px-2 py-1">% of Total</th>
-            <th className="border px-2 py-1">Annual Flights per UAV</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((r, idx) => (
-            <tr key={idx} className="even:bg-gray-50">
-              <td className="border px-2 py-1">{r.name}</td>
-              <td className="border px-2 py-1">{Math.round(r.lower)}</td>
-              <td className="border px-2 py-1">{r.lowerPct.toFixed(2)}%</td>
-              <td className="border px-2 py-1">{Math.round(r.upper)}</td>
-              <td className="border px-2 py-1">{r.upperPct.toFixed(2)}%</td>
-              <td className="border px-2 py-1">{r.perUAV}</td>
+      <button
+        onClick={handleCalculate}
+     
+      >
+        Calculate
+      </button>
+
+      {showResults && (
+        <table >
+          <thead>
+            <tr>
+              <th >Category</th>
+              <th >Lower Bound</th>
+              <th >% of Total</th>
+              <th >Upper Bound</th>
+              <th >% of Total</th>
+              <th >Annual Flights per UAV</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {computeTotals().map((r, idx) => (
+              <tr key={idx}>
+                <td >{r.name}</td>
+                <td >{Math.round(r.lower)}</td>
+                <td >{r.lowerPct.toFixed(2)}%</td>
+                <td >{Math.round(r.upper)}</td>
+                <td >{r.upperPct.toFixed(2)}%</td>
+                <td >{r.perUAV}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </section>
   );
 }
