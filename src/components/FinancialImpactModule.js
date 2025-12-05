@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-// Format currency
+
 function fmtCurrency(n) {
   if (isNaN(n)) return "-";
   return n.toLocaleString(undefined, {
@@ -11,7 +11,7 @@ function fmtCurrency(n) {
   });
 }
 
-// Default mapped volumes
+
 const defaultVolumes = {
   Vol_Delivery: { flightsLow: 9525600, flightsHigh: 23814000, uavsLow: 39690, uavsHigh: 99225 },
   Vol_UAM: { flightsLow: 23400000, flightsHigh: 253500000, uavsLow: 3900, uavsHigh: 42250 },
@@ -19,7 +19,6 @@ const defaultVolumes = {
   Vol_Rec: { flightsLow: 917280, flightsHigh: 2076360 },
 };
 
-// Friendly labels for volumes
 const volumeLabels = {
   flightsLow: "Flights (Low)",
   flightsHigh: "Flights (High)",
@@ -33,7 +32,7 @@ export default function FinancialImpactModule() {
   const [showDetails, setShowDetails] = useState(false);
   const [volumes, setVolumes] = useState(defaultVolumes);
 
-  // Inputs with labels as per PDF
+  
   const [inputs, setInputs] = useState({
     price_delivery: 7.0,       // Avg. Revenue per Delivery
     price_uam: 180.0,           // Avg. Ticket per UAM Trip
@@ -62,13 +61,13 @@ export default function FinancialImpactModule() {
 
   const calculate = () => setShowResults(true);
 
-  // --- Helper functions ---
+ 
   const getFlightsLow = (obj) => (obj && obj.flightsLow) || 0;
   const getFlightsHigh = (obj) => (obj && obj.flightsHigh) || 0;
   const getUavsLow = (obj) => (obj && obj.uavsLow) || 0;
   const getUavsHigh = (obj) => (obj && obj.uavsHigh) || 0;
 
-  // --- Calculations ---
+
   const { 
     price_delivery, price_uam, price_inspection, price_rec,
     fee_permit_drone, fee_permit_uam,
@@ -76,29 +75,29 @@ export default function FinancialImpactModule() {
     econ_multiplier, avg_salary
   } = inputs;
 
-  // Delivery
+ 
   const Vol_Delivery_Low = getFlightsLow(volumes.Vol_Delivery);
   const Vol_Delivery_High = getFlightsHigh(volumes.Vol_Delivery);
   const UAVs_Delivery_Low = getUavsLow(volumes.Vol_Delivery);
   const UAVs_Delivery_High = getUavsHigh(volumes.Vol_Delivery);
 
-  // UAM
+
   const Vol_UAM_Low = getFlightsLow(volumes.Vol_UAM);
   const Vol_UAM_High = getFlightsHigh(volumes.Vol_UAM);
   const UAVs_UAM_Low = getUavsLow(volumes.Vol_UAM);
   const UAVs_UAM_High = getUavsHigh(volumes.Vol_UAM);
 
-  // Inspection
+  
   const Vol_Inspection_Low = getFlightsLow(volumes.Vol_Inspection);
   const Vol_Inspection_High = getFlightsHigh(volumes.Vol_Inspection);
   const UAVs_Inspection_Low = getUavsLow(volumes.Vol_Inspection);
   const UAVs_Inspection_High = getUavsHigh(volumes.Vol_Inspection);
 
-  // Recreational
+
   const Vol_Rec_Low = getFlightsLow(volumes.Vol_Rec);
   const Vol_Rec_High = getFlightsHigh(volumes.Vol_Rec);
 
-  // Flight revenues
+
   const Rev_Flight_Delivery_Low = Vol_Delivery_Low * price_delivery;
   const Rev_Flight_UAM_Low = Vol_UAM_Low * price_uam;
   const Rev_Flight_Insp_Low = Vol_Inspection_Low * price_inspection;
@@ -113,14 +112,14 @@ export default function FinancialImpactModule() {
   const Total_Flight_Fees_High =
     Rev_Flight_Delivery_High + Rev_Flight_UAM_High + Rev_Flight_Insp_High + Rev_Flight_Rec_High;
 
-  // Permit revenues
+
   const Count_Small_UAVs_Low = UAVs_Delivery_Low + UAVs_Inspection_Low;
   const Total_Permits_Low = Count_Small_UAVs_Low * fee_permit_drone + UAVs_UAM_Low * fee_permit_uam;
 
   const Count_Small_UAVs_High = UAVs_Delivery_High + UAVs_Inspection_High;
   const Total_Permits_High = Count_Small_UAVs_High * fee_permit_drone + UAVs_UAM_High * fee_permit_uam;
 
-  // Allocation
+
   const Alloc_Protocol_Low = Total_Flight_Fees_Low * (split_protocol / 100);
   const Alloc_Owner_Low = Total_Flight_Fees_Low * (split_owners / 100);
   const Alloc_City_Corridor_Low = Alloc_Owner_Low * (split_city / 100);
@@ -133,7 +132,6 @@ export default function FinancialImpactModule() {
   const Alloc_Private_Corridor_High = Alloc_Owner_High * (1 - split_city / 100);
   const Total_City_Rev_High = Alloc_City_Corridor_High + Total_Permits_High;
 
-  // Economic impact
   const GEA_Low = (Total_Flight_Fees_Low + Total_Permits_Low) * econ_multiplier;
   const Jobs_Low = Math.round(GEA_Low / avg_salary);
   const GEA_High = (Total_Flight_Fees_High + Total_Permits_High) * econ_multiplier;
@@ -142,7 +140,7 @@ export default function FinancialImpactModule() {
   const Grand_Total_Low = Total_Flight_Fees_Low + Total_Permits_Low;
   const Grand_Total_High = Total_Flight_Fees_High + Total_Permits_High;
 
-  // --- Summary Cards Variables ---
+
   const Summary_TotalMarketRevenue = bound === "low" ? Grand_Total_Low : Grand_Total_High;
   const Summary_TotalCityRevenue = bound === "low" ? Total_City_Rev_Low : Total_City_Rev_High;
   const Summary_Jobs = bound === "low" ? Jobs_Low : Jobs_High;
@@ -159,9 +157,9 @@ export default function FinancialImpactModule() {
     <section className="card">
       <h2 style={{ fontSize: 22, marginBottom: 16 }}>Financial & Economic Impact</h2>
 
-      {/* --- INPUTS --- */}
+ 
       <div className="grid">
-        {/* Pricing Inputs */}
+  
         {["price_delivery","price_uam","price_inspection","price_rec"].map((key) => (
           <label key={key}>
             <span>{
@@ -176,7 +174,7 @@ export default function FinancialImpactModule() {
           </label>
         ))}
 
-        {/* Permit Inputs */}
+
         {["fee_permit_drone","fee_permit_uam"].map((key) => (
           <label key={key}>
             <span>{
@@ -189,7 +187,6 @@ export default function FinancialImpactModule() {
           </label>
         ))}
 
-        {/* Allocation Inputs */}
         {["split_owners","split_protocol","split_city"].map((key) => (
           <label key={key}>
             <span>{
@@ -203,7 +200,6 @@ export default function FinancialImpactModule() {
           </label>
         ))}
 
-        {/* Impact Inputs */}
         {["econ_multiplier","avg_salary"].map((key) => (
           <label key={key}>
             <span>{
@@ -216,7 +212,6 @@ export default function FinancialImpactModule() {
           </label>
         ))}
 
-        {/* Volume Inputs with friendly labels */}
         {Object.keys(volumes).map((cat) =>
           Object.keys(volumes[cat]).map((key) => (
             <label key={`${cat}_${key}`}>
@@ -231,10 +226,8 @@ export default function FinancialImpactModule() {
         )}
       </div>
 
-      {/* Calculate Button */}
       <button onClick={calculate}>Calculate</button>
 
-      {/* Bound toggles and Show Details */}
       {showResults && (
         <div style={{ marginBottom: 16 }}>
           <button onClick={() => { setBound("low"); setShowDetails(false); }}
@@ -271,7 +264,6 @@ export default function FinancialImpactModule() {
         </div>
       )}
 
-      {/* --- Summary Cards --- */}
       {showResults && (
         <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
           <Card label="Total Market Revenue" value={fmtCurrency(Summary_TotalMarketRevenue)} />
@@ -326,7 +318,6 @@ export default function FinancialImpactModule() {
         </div>
       )}
 
-      {/* --- Detailed Calculations --- */}
       {showResults && showDetails && (
         <div style={{ marginBottom: 16 }}>
           <h4 style={{ marginBottom: 8 }}>Detailed Calculations — {bound === "low" ? "Lower" : "Upper"} Bound</h4>
@@ -352,7 +343,6 @@ export default function FinancialImpactModule() {
         </div>
       )}
 
-      {/* --- Revenue Mix Chart --- */}
       {showResults && (
         <div>
           <h4 style={{ marginBottom: 8 }}>Revenue Mix Chart ({bound === "low" ? "Lower" : "Upper"} Bound)</h4>
@@ -380,7 +370,6 @@ export default function FinancialImpactModule() {
   );
 }
 
-// Card component for metrics
 function Card({ label, value }) {
   return (
     <div style={{ flex: 1, minWidth: 180, border: "1px solid #e5e7eb", borderRadius: 8, padding: 12, background: "#fff", boxShadow: "0 2px 6px rgba(0,0,0,0.04)" }}>
@@ -389,3 +378,4 @@ function Card({ label, value }) {
     </div>
   );
 }
+
