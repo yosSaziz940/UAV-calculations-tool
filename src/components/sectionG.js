@@ -92,9 +92,9 @@ export default function SectionG({ inputs }) {
     <section className="card">
       <h2>G. Structures & Construction Monitoring</h2>
 
-      <div classname="grid">
+      <div className="grid">
         {data.types.map((type, index) => (
-          <div key={index} >
+          <div key={index}>
             <h3>{type.name}</h3>
             <label>
               Structures
@@ -117,7 +117,7 @@ export default function SectionG({ inputs }) {
           </div>
         ))}
 
-        <div >
+        <div>
           <label >
             Maximum Annual Structures per UAV
             <input
@@ -218,4 +218,3 @@ export default function SectionG({ inputs }) {
     </section>
   );
 }
-
