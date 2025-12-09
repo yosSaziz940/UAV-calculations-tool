@@ -65,7 +65,6 @@ export default function DroneScorecardMap() {
         const dataMap = {};
         const statesList = [];
 
-        // Process Excel data
         jsonData.forEach((row) => {
           const stateName = row['State'];
           if (!stateName) return;
@@ -84,7 +83,6 @@ export default function DroneScorecardMap() {
           statesList.push(cleanRow);
         });
 
-        // Calculate ranks
         statesList.sort((a, b) => b.drone_score_2025 - a.drone_score_2025);
         statesList.forEach((row, index) => {
           row.rank_2025 = index + 1;
@@ -95,7 +93,6 @@ export default function DroneScorecardMap() {
           row.rank_2023 = index + 1;
         });
 
-        // Merge properties into geoJson
         const mergedFeatures = geoJson.features.map(f => {
           const name = f.properties.name;
           const data = dataMap[name] || {};
@@ -122,7 +119,6 @@ export default function DroneScorecardMap() {
     }
   }, [selectedFeature]);
 
-  // Zoom to selected feature when map loads and feature is selected
   useEffect(() => {
     if (mapLoaded && selectedFeature && mapRef.current) {
       zoomToFeature(selectedFeature);
@@ -161,7 +157,6 @@ export default function DroneScorecardMap() {
     mapRef.current.fitBounds(bounds, { padding: 40, duration: 1500 });
   };
 
-  // --- LAYERS ---
   const fillLayer2023 = useMemo(() => {
     return {
       id: "state-fills-2023",
@@ -204,7 +199,6 @@ export default function DroneScorecardMap() {
     };
   }, []);
 
-  // Create a helper function to get max value for a factor
   const getMaxValueForFactor = (factor) => {
     const option = factorOptions.find(opt => opt.value === factor);
     return option ? option.max : 100;
@@ -435,15 +429,15 @@ export default function DroneScorecardMap() {
           <div className="map-legend">
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
-              <div className="legend-label">Low (0-50)</div>
+              <div className="legend-label">Low</div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
-              <div className="legend-label">Medium (50-70)</div>
+              <div className="legend-label">Medium </div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#68d391" }}></div>
-              <div className="legend-label">High (70-90)</div>
+              <div className="legend-label">High </div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
@@ -475,15 +469,15 @@ export default function DroneScorecardMap() {
           <div className="map-legend">
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
-              <div className="legend-label">Low (0-50)</div>
+              <div className="legend-label">Low</div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
-              <div className="legend-label">Medium (50-70)</div>
+              <div className="legend-label">Medium</div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#68d391" }}></div>
-              <div className="legend-label">High (70-90)</div>
+              <div className="legend-label">High</div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
@@ -699,3 +693,4 @@ export default function DroneScorecardMap() {
     </div>
   );
 }
+
