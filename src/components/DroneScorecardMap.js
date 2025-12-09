@@ -23,7 +23,7 @@ ChartJS.register(
   LineElement
 );
 
-const MAPBOX_TOKEN = "pk.eyJ1IjoieW9zdGluYWF6aXoiLCJhIjoiY204NDc1cndyMXZtazJrczVwenR2d2Z5ciJ9.x-uEqhTb7_Btjw3LgBUhqQ";
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const GEOJSON_URL = "https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json";
 const EXCEL_2025_URL = "/data/drone_scorecard_2025_update_FINAL.xlsx";
 
@@ -687,3 +687,4 @@ export default function DroneScorecardMap() {
     </div>
   );
 }
+
