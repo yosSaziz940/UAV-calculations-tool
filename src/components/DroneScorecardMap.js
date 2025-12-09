@@ -240,102 +240,102 @@ export default function DroneScorecardMap() {
     }
   };
 
-  // Fixed text layer - removed incorrect visibility syntax
-  const textLayer = {
-    id: "state-labels",
-    type: "symbol",
-    layout: {
-      "text-field": ["get", "name"],
-      "text-size": [
-        "interpolate", 
-        ["linear"], 
-        ["zoom"], 
-        3, 8,     // Smaller zoom levels: 8px text
-        4, 10,    // Slightly zoomed in: 10px text
-        5, 12,    // More zoom: 12px text
-        6, 14,    // Even more zoom: 14px text
-        7, 16     // Highest zoom: 16px text
-      ],
-      "text-anchor": "center",
-      "text-justify": "center",
-      "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"],
-      "text-allow-overlap": true,
-      "text-ignore-placement": true,
-      "text-padding": 2,
-      "text-line-height": 1.2,
-      "visibility": "visible"  // Fixed: simple string value instead of stops
-    },
-    paint: {
-      "text-color": "#000000",
-      "text-halo-color": "#ffffff",
-      "text-halo-width": 2,
-      "text-opacity": [
-        "interpolate",
-        ["linear"],
-        ["zoom"],
-        3, 0.7,  // Slightly transparent at far zoom
-        4, 0.8,  // More opaque as we zoom in
-        5, 1     // Fully opaque at closer zoom
-      ]
-    }
-  };
+ 
+const textLayer = {
+  id: "state-labels",
+  type: "symbol",
+  layout: {
+    "text-field": ["get", "name"],
+    "text-size": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      3, 8,
+      4, 10,
+      5, 14,
+      6, 18,
+      7, 20
+    ],
+    "text-anchor": "center",
+    "text-justify": "center",
+    "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"],
+    "text-allow-overlap": false,
+    "text-ignore-placement": false
+  },
+  paint: {
+    "text-color": "#000000",
+    "text-halo-color": "#ffffff",
+    "text-halo-width": 2,
+    "text-opacity": 1
+  }
+};
 
-  const scoreTextLayer = useMemo(() => ({
-    id: "state-scores",
-    type: "symbol",
-    layout: {
-      "text-field": ["to-string", ["get", selectedFactor]],
-      "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 6, 10, 10, 14],
-      "text-anchor": "bottom",
-      "text-justify": "center",
-      "text-offset": [0, -1],
-      "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-allow-overlap": true
-    },
-    paint: {
-      "text-color": "#000000",
-      "text-halo-color": "#ffffff",
-      "text-halo-width": 2
-    }
-  }), [selectedFactor]);
+const scoreTextLayer = useMemo(() => ({
+  id: "state-scores",
+  type: "symbol",
+  layout: {
+    "text-field": ["to-string", ["get", selectedFactor]],
+    "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 5, 14, 7, 24],
+    "text-anchor": "bottom",
+    "text-justify": "center",
+    "text-offset": [0, -1.8],
+    "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
+    "text-allow-overlap": false,
+    "text-ignore-placement": false,
+    "text-padding": 2
+  },
+  paint: {
+    "text-color": "#000000",
+    "text-halo-color": "#ffffff",
+    "text-halo-width": 2,
+    "text-opacity": 1
+  }
+}), [selectedFactor]);
 
-  const scoreTextLayer2023 = useMemo(() => ({
-    id: "state-scores-2023",
-    type: "symbol",
-    layout: {
-      "text-field": ["to-string", ["get", "drone_score_2023"]],
-      "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 6, 10, 10, 14],
-      "text-anchor": "bottom",
-      "text-justify": "center",
-      "text-offset": [0, -1],
-      "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-allow-overlap": true
-    },
-    paint: {
-      "text-color": "#000000",
-      "text-halo-color": "#ffffff",
-      "text-halo-width": 2
-    }
-  }), []);
+const scoreTextLayer2023 = useMemo(() => ({
+  id: "state-scores-2023",
+  type: "symbol",
+  layout: {
+    "text-field": ["to-string", ["get", "drone_score_2023"]],
+    "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 5, 14, 7, 24],
+    "text-anchor": "center",
+    "text-justify": "center",
+    "text-offset": [0, -1.8],
+    "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
+    "text-allow-overlap": false,
+    "text-ignore-placement": false,
+    "text-padding": 2
+  },
+  paint: {
+    "text-color": "#000000",
+    "text-halo-color": "#ffffff",
+    "text-halo-width": 2,
+    "text-opacity": 1
+  }
+}), []);
 
-  const scoreTextLayer2025 = useMemo(() => ({
-    id: "state-scores-2025",
-    type: "symbol",
-    layout: {
-      "text-field": ["to-string", ["get", "drone_score_2025"]],
-      "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 6, 10, 10, 14],
-      "text-anchor": "bottom",
-      "text-justify": "center",
-      "text-offset": [0, -1],
-      "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-allow-overlap": true
-    },
-    paint: {
-      "text-color": "#000000",
-      "text-halo-color": "#ffffff",
-      "text-halo-width": 2
-    }
-  }), []);
+const scoreTextLayer2025 = useMemo(() => ({
+  id: "state-scores-2025",
+  type: "symbol",
+  layout: {
+    "text-field": ["to-string", ["get", "drone_score_2025"]],
+    "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 5, 14, 7, 24],
+    "text-anchor": "center",
+    "text-justify": "center",
+    "text-offset": [0, -1.8],
+    "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
+    "text-allow-overlap": false,
+    "text-ignore-placement": false,
+    "text-padding": 2
+  },
+  paint: {
+    "text-color": "#000000",
+    "text-halo-color": "#ffffff",
+    "text-halo-width": 2,
+    "text-opacity": 1
+  }
+}), []);
+
 
   const highlightFilter = useMemo(() => ["==", "name", selectedFeature?.properties?.name || ""], [selectedFeature]);
 
@@ -344,7 +344,7 @@ export default function DroneScorecardMap() {
     if (!selectedFeature) return null;
     const p = selectedFeature.properties;
 
-    // Safety check for N/A keys
+  
     const getValue = (key) => p[key] || 0;
 
     const data = {
