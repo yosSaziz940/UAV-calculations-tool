@@ -62,7 +62,6 @@ body, html {
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
 }
 
-/* Focus – same as active but with outline */
 .sidebar button:focus {
   outline: none;
   color: #ffffff;
@@ -71,7 +70,6 @@ body, html {
   transform: translateX(3px);
 }
 
-/* Active / Selected – noticeable blue highlight */
 .sidebar button.active {
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   color: #ffffff;
