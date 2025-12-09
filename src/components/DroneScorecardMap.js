@@ -42,6 +42,8 @@ export default function DroneScorecardMap() {
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hoverInfo, setHoverInfo] = useState(null);
+  const [hoverInfo2023, setHoverInfo2023] = useState(null);
+  const [hoverInfo2025, setHoverInfo2025] = useState(null);
   const [selectedFactor, setSelectedFactor] = useState("drone_score_2025");
   const [showMap, setShowMap] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -238,21 +240,43 @@ export default function DroneScorecardMap() {
     }
   };
 
+  // Fixed text layer - removed incorrect visibility syntax
   const textLayer = {
     id: "state-labels",
     type: "symbol",
     layout: {
       "text-field": ["get", "name"],
-      "text-size": 8,
+      "text-size": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        3, 8,     // Smaller zoom levels: 8px text
+        4, 10,    // Slightly zoomed in: 10px text
+        5, 12,    // More zoom: 12px text
+        6, 14,    // Even more zoom: 14px text
+        7, 16     // Highest zoom: 16px text
+      ],
       "text-anchor": "center",
       "text-justify": "center",
       "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"],
-      "text-allow-overlap": false
+      "text-allow-overlap": false,
+      "text-ignore-placement": false,
+      "text-padding": 4,
+      "text-line-height": 1.2,
+      "visibility": "visible"  // Fixed: simple string value instead of stops
     },
     paint: {
       "text-color": "#000000",
       "text-halo-color": "#ffffff",
-      "text-halo-width": 1
+      "text-halo-width": 2,
+      "text-opacity": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        3, 0.7,  // Slightly transparent at far zoom
+        4, 0.8,  // More opaque as we zoom in
+        5, 1     // Fully opaque at closer zoom
+      ]
     }
   };
 
@@ -261,12 +285,14 @@ export default function DroneScorecardMap() {
     type: "symbol",
     layout: {
       "text-field": ["to-string", ["get", selectedFactor]],
-      "text-size": 10,
-      "text-anchor": "bottom",
+      "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 6, 10, 10, 14],
+      "text-anchor": "top",
       "text-justify": "center",
-      "text-offset": [0, -1],
+      "text-offset": [0, 1],
       "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-allow-overlap": false
+      "text-allow-overlap": false,
+      "text-ignore-placement": false,
+      "text-padding": 4
     },
     paint: {
       "text-color": "#000000",
@@ -280,12 +306,14 @@ export default function DroneScorecardMap() {
     type: "symbol",
     layout: {
       "text-field": ["to-string", ["get", "drone_score_2023"]],
-      "text-size": 10,
-      "text-anchor": "bottom",
+      "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 6, 10, 10, 14],
+      "text-anchor": "top",
       "text-justify": "center",
-      "text-offset": [0, -1],
+      "text-offset": [0, 1],
       "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-allow-overlap": false
+      "text-allow-overlap": false,
+      "text-ignore-placement": false,
+      "text-padding": 4
     },
     paint: {
       "text-color": "#000000",
@@ -299,12 +327,14 @@ export default function DroneScorecardMap() {
     type: "symbol",
     layout: {
       "text-field": ["to-string", ["get", "drone_score_2025"]],
-      "text-size": 10,
-      "text-anchor": "bottom",
+      "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 6, 10, 10, 14],
+      "text-anchor": "top",
       "text-justify": "center",
-      "text-offset": [0, -1],
+      "text-offset": [0, 1],
       "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
-      "text-allow-overlap": false
+      "text-allow-overlap": false,
+      "text-ignore-placement": false,
+      "text-padding": 4
     },
     paint: {
       "text-color": "#000000",
@@ -412,19 +442,31 @@ export default function DroneScorecardMap() {
             <span className="badge badge-neutral">Historical Data</span>
           </div>
           {geoData && (
-            <Map
-              initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
-              mapStyle="mapbox://styles/mapbox/light-v10"
-              mapboxAccessToken={MAPBOX_TOKEN}
-              attributionControl={false}
-              interactiveLayerIds={[]}
-            >
-              <Source id="states-2023" type="geojson" data={geoData}>
-                <Layer {...fillLayer2023} />
-                <Layer {...textLayer} />
-                <Layer {...scoreTextLayer2023} />
-              </Source>
-            </Map>
+            <>
+              <Map
+                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
+                mapStyle="mapbox://styles/mapbox/light-v10"
+                mapboxAccessToken={MAPBOX_TOKEN}
+                attributionControl={false}
+                interactiveLayerIds={["state-fills-2023"]}
+                onMouseMove={(e) => {
+                  const f = e.features?.[0];
+                  setHoverInfo2023(f ? { feature: f, x: e.point.x, y: e.point.y } : null);
+                }}
+                onMouseLeave={() => setHoverInfo2023(null)}
+              >
+                <Source id="states-2023" type="geojson" data={geoData}>
+                  <Layer {...fillLayer2023} />
+                  <Layer {...textLayer} />
+                  <Layer {...scoreTextLayer2023} />
+                </Source>
+              </Map>
+              {hoverInfo2023 && (
+                <div className="tooltip" style={{ left: hoverInfo2023.x + 10, top: hoverInfo2023.y + 10 }}>
+                  <strong>{hoverInfo2023.feature.properties.name}</strong>
+                </div>
+              )}
+            </>
           )}
           <div className="map-legend">
             <div className="legend-item">
@@ -452,19 +494,31 @@ export default function DroneScorecardMap() {
             <span className="badge badge-positive">Current Data</span>
           </div>
           {geoData && (
-            <Map
-              initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
-              mapStyle="mapbox://styles/mapbox/light-v10"
-              mapboxAccessToken={MAPBOX_TOKEN}
-              attributionControl={false}
-              interactiveLayerIds={[]}
-            >
-              <Source id="states-2025" type="geojson" data={geoData}>
-                <Layer {...fillLayer2025} />
-                <Layer {...textLayer} />
-                <Layer {...scoreTextLayer2025} />
-              </Source>
-            </Map>
+            <>
+              <Map
+                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
+                mapStyle="mapbox://styles/mapbox/light-v10"
+                mapboxAccessToken={MAPBOX_TOKEN}
+                attributionControl={false}
+                interactiveLayerIds={["state-fills-2025"]}
+                onMouseMove={(e) => {
+                  const f = e.features?.[0];
+                  setHoverInfo2025(f ? { feature: f, x: e.point.x, y: e.point.y } : null);
+                }}
+                onMouseLeave={() => setHoverInfo2025(null)}
+              >
+                <Source id="states-2025" type="geojson" data={geoData}>
+                  <Layer {...fillLayer2025} />
+                  <Layer {...textLayer} />
+                  <Layer {...scoreTextLayer2025} />
+                </Source>
+              </Map>
+              {hoverInfo2025 && (
+                <div className="tooltip" style={{ left: hoverInfo2025.x + 10, top: hoverInfo2025.y + 10 }}>
+                  <strong>{hoverInfo2025.feature.properties.name}</strong>
+                </div>
+              )}
+            </>
           )}
           <div className="map-legend">
             <div className="legend-item">
@@ -538,6 +592,7 @@ export default function DroneScorecardMap() {
                   const f = e.features?.[0];
                   setHoverInfo(f ? { feature: f, x: e.point.x, y: e.point.y } : null);
                 }}
+              
                 onClick={handleMapClick}
                 onLoad={() => {
                   setMapLoaded(true);
@@ -546,6 +601,7 @@ export default function DroneScorecardMap() {
                   }
                 }}
                 attributionControl={false}
+                onMouseLeave={() => setHoverInfo(null)}
               >
                 <Source id="states" type="geojson" data={geoData}>
                   <Layer {...fillLayer} />
@@ -686,14 +742,4 @@ export default function DroneScorecardMap() {
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-
-
+ 
