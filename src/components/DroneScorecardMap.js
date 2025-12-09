@@ -24,7 +24,7 @@ ChartJS.register(
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const GEOJSON_URL = "https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json";
-const EXCEL_2025_URL = "/data/drone_scorecard_2025_update_FINAL.xlsx";
+const EXCEL_2025_URL = await fetch(process.env.SHEET_URL);
 
 const factorOptions = [
   { value: "drone_score_2025", label: "Overall Score 2025", max: 100 },
@@ -693,5 +693,6 @@ export default function DroneScorecardMap() {
     </div>
   );
 }
+
 
 
