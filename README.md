@@ -331,8 +331,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   |-------|--------|------|-------------|
   | Excel file data | File | scores/rankings | State readiness data |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Displays interactive maps comparing 2023 and 2025 state readiness scores.
