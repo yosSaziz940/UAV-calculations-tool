@@ -372,11 +372,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   |--------|-------------|
   | Loaded data structures | Data for calculations/maps |
 
-### Flowchart of Dependencies
-
-Sections A → B, C → D–H → I → J → K → Financial → Infrastructure → Scorecard
-
-(Data Integration supports all)
 
 ## Installation
 
