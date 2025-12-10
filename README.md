@@ -9,7 +9,7 @@ Key functionalities include:
 - Volume estimation for recreational, commercial, and industrial UAV operations.
 - Financial modeling for UAV-related investments and revenues.
 - Infrastructure planning for UAV support systems.
-- Interactive mapping for scorecard visualization.
+- Interactive mapping for the drone readiness scorecard visualization.
 
 ## Features
 
