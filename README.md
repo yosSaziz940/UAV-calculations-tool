@@ -455,7 +455,6 @@ uav-volume-tool-react/
 - **Testing**: Jest, React Testing Library
 - **Build Tool**: Create React App (React Scripts 5.0.1)
 
-[![npm version](https://badge.fury.io/js/npm.svg)](https://badge.fury.io/js/npm) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Dependencies
 
