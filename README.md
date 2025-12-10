@@ -37,7 +37,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
 
 ### Section Details
 
-- [**Section A: General Inputs**](#section-a-general-inputs)
+- [**Section A: General Inputs**](src/components/sectionA.js) 
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -51,8 +51,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Coverage width per path | User input | meters | Width covered per flight path |
   | Max structures/week | User input | structures | Maximum structures inspected per week |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Calculates operational hours per year.
@@ -69,7 +67,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Covered area/flight (hectares) | Area covered per flight |
   | Max annual structures | Maximum structures inspectable annually |
 
-- [**Section B: Recreational**](#section-b-recreational)
+- [**Section B: Recreational**](src/components/sectionB.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -88,7 +86,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAVs (lower/upper) | Estimated UAV count |
   | Annual UAV flights (lower/upper) | Annual flight volume |
 
-- [**Section C: Commercial Delivery**](#section-c-commercial-delivery)
+- [**Section C: Commercial Delivery**](src/components/sectionC.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -113,7 +111,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Average flights/UAV/year | Flights per UAV annually |
   | Annual flights/UAVs (lower/upper) | Flight and UAV estimates |
 
-- [**Section D: Urban Air Mobility (UAM)**](#section-d-urban-air-mobility-uam)
+- [**Section D: Urban Air Mobility (UAM)**](src/components/sectionD.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -122,8 +120,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAV capacity % (lower/upper) | User input | % | Capacity utilization bounds |
   | Average flights/year | User input | flights | Flights per UAV per year |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Forecasts UAV usage in urban transportation.
@@ -134,7 +130,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Annual vehicle share trips (lower/upper) | UAV trip volume |
   | Annual UAV flights/UAVs (lower/upper) | Flight and UAV estimates |
 
-- [**Section E: Agriculture**](#section-e-agriculture)
+- [**Section E: Agriculture**](src/components/sectionE.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -145,8 +141,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Max annual flights/UAV | User input | flights | Max flights per UAV |
   | UAV capacity % (lower/upper) | User input | % | Capacity utilization bounds |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Estimates UAV usage for agricultural monitoring.
@@ -161,7 +155,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAVs/location | UAVs per location |
   | Total capacity estimates | Overall estimates |
 
-- [**Section F: Linear Inspection**](#section-f-linear-inspection)
+- [**Section F: Linear Inspection**](src/components/sectionF.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -171,8 +165,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAV flights/year | User input | flights | Flights per UAV per year |
   | UAV capacity % (lower/upper) | User input | % | Capacity utilization bounds |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Estimates UAV usage for inspecting linear infrastructure.
@@ -186,7 +178,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAVs/location | UAVs per location |
   | Total capacity estimates | Overall estimates |
 
-- [**Section G: Structure Inspection**](#section-g-structure-inspection)
+- [**Section G: Structure Inspection**](src/components/sectionG.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -196,8 +188,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAV flights/year | User input | flights | Flights per UAV per year |
   | UAV capacity % (lower/upper) | User input | % | Capacity utilization bounds |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Estimates UAV usage for inspecting structures.
@@ -211,7 +201,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAVs/location | UAVs per location |
   | Total capacity estimates | Overall estimates |
 
-- [**Section H: Emergency Response**](#section-h-emergency-response)
+- [**Section H: Emergency Response**](src/components/sectionH.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -222,8 +212,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Avg % events served/UAV | User input | % | Events per UAV |
   | UAV capacity % (lower/upper) | User input | % | Capacity utilization bounds |
 
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Estimates UAV usage in emergency scenarios.
@@ -236,7 +224,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | UAVs | Total UAVs |
   | Annual flights/UAVs (lower/upper) | Estimates |
 
-- [**Section I: Other**](#section-i-other)
+- [**Section I: Other**](src/components/sectionI.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -254,7 +242,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   |--------|-------------|
   | Totals and percentages by category | Aggregated estimates |
 
-- [**Section J: Distributions by Vehicle Type**](#section-j-distributions-by-vehicle-type)
+- [**Section J: Distributions by Vehicle Type**](src/components/sectionJ.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -276,7 +264,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Vehicle type distributions | Size breakdowns |
   | Annual flights/UAVs (lower/upper) | Estimates |
 
-- [**Section K: Chart Calculations**](#section-k-chart-calculations)
+- [**Section K: Chart Calculations**](src/components/sectionK.js)  
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -292,7 +280,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   |--------|-------------|
   | Rounded annual flights/UAVs for charting | Chart-ready data |
 
-- **Financial Impact Module**
+- [**Financial Impact Module**](src/components/FinancialImpactModule.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -315,7 +303,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Revenue allocation table | Allocation details |
   | Revenue mix chart | Visual breakdown |
 
-- **Infrastructure Fiscal Module**
+- [**Infrastructure Fiscal Module**](src/components/InfrastructureFiscalModule.js) 
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -337,7 +325,7 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Estimated annual sales tax revenue (USD) | Tax revenue |
   | Fiscal mix chart | Visual breakdown |
 
-- **Drone Scorecard Map**
+- [**Drone Scorecard Map**](src/components/DroneScorecardMap.js)
 
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
@@ -361,9 +349,6 @@ The tool is based on the UAV Volume Estimate Tool v1.0.3 Excel spreadsheet, prov
   | Input | Source | Unit | Description |
   |-------|--------|------|-------------|
   | Excel files | File | data | Spreadsheet inputs |
-
-  | Reused Inputs | - |
-  |---------------|---|
 
   What it does:
   - Imports and exports data from Excel files using the XLSX library for use in the application.
