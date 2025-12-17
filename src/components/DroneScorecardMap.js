@@ -166,12 +166,12 @@ export default function DroneScorecardMap() {
       paint: {
         "fill-color": [
           "case",
-          ["==", ["get", "drone_score_2023"], null], "#e2e8f0",
-          ["interpolate", ["linear"], ["get", "drone_score_2023"],
-            0, "#e53e3e",
-            50, "#f6e05e",
-            70, "#68d391",
-            90, "#38a169"
+          ["==", ["get", "rank_2023"], null], "#e2e8f0",
+          ["interpolate", ["linear"], ["get", "rank_2023"],
+            1, "#38a169",
+            10, "#68d391",
+            25, "#f6e05e",
+            50, "#e53e3e" 
           ]
         ],
         "fill-opacity": 0.8,
@@ -187,15 +187,15 @@ export default function DroneScorecardMap() {
       paint: {
         "fill-color": [
           "case",
-          ["==", ["get", "drone_score_2025"], null], "#e2e8f0",
-          ["interpolate", ["linear"], ["get", "drone_score_2025"],
-            0, "#e53e3e",
-            50, "#f6e05e",
-            70, "#68d391",
-            90, "#38a169"
+          ["==", ["get", "rank_2025"], null], "#e2e8f0",
+          ["interpolate", ["linear"], ["get", "rank_2025"],
+            1, "#38a169",
+            10, "#68d391",
+            25, "#f6e05e",
+            50, "#e53e3e" 
           ]
         ],
-        "fill-opacity": 0.8,
+        "fill-opacity": 0.85,
         "fill-outline-color": "#ffffff"
       }
     };
@@ -229,6 +229,17 @@ export default function DroneScorecardMap() {
         "fill-outline-color": "#ffffff"
       }
     };
+  }, [selectedFactor]);
+
+  const legendScale = useMemo(() => {
+    const max = getMaxValueForFactor(selectedFactor) || 100;
+    const fmt = (v) => Number.isInteger(v) ? v : v.toFixed(1);
+    return [
+      { color: "#e53e3e", label: `Low (0–${fmt(max * 0.5)})` },
+      { color: "#f6e05e", label: `Medium (${fmt(max * 0.5)}–${fmt(max * 0.7)})` },
+      { color: "#68d391", label: `High (${fmt(max * 0.7)}–${fmt(max * 0.9)})` },
+      { color: "#38a169", label: `Excellent (${fmt(max * 0.9)}–${fmt(max)})` }
+    ];
   }, [selectedFactor]);
 
   const highlightLayer = {
@@ -296,7 +307,11 @@ const scoreTextLayer2023 = useMemo(() => ({
   id: "state-scores-2023",
   type: "symbol",
   layout: {
-    "text-field": ["to-string", ["get", "drone_score_2023"]],
+    "text-field": [
+      "concat",
+      "#",
+      ["to-string", ["get", "rank_2023"]]
+    ],
     "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 5, 14, 7, 24],
     "text-anchor": "center",
     "text-justify": "center",
@@ -318,7 +333,11 @@ const scoreTextLayer2025 = useMemo(() => ({
   id: "state-scores-2025",
   type: "symbol",
   layout: {
-    "text-field": ["to-string", ["get", "drone_score_2025"]],
+    "text-field": [
+      "concat",
+      "#",
+      ["to-string", ["get", "rank_2025"]]
+    ],
     "text-size": ["interpolate", ["linear"], ["zoom"], 3, 8, 5, 14, 7, 24],
     "text-anchor": "center",
     "text-justify": "center",
@@ -420,8 +439,125 @@ const scoreTextLayer2025 = useMemo(() => ({
 
   return (
     <div className="card">
+      <style>{`
+        .static-maps-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          margin-bottom: 2rem;
+        }
+        .scorecard-header {
+          padding: 28px 32px;
+          margin-bottom: 16px;
+          border-radius: 12px;
+          background: #ffffff;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+          flex-wrap: wrap;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        .scorecard-header .title {
+          font-size: 26px;
+        }
+        .scorecard-header .subtitle {
+          font-size: 14px;
+          color: #475569;
+        }
+        @media (max-width: 1024px) {
+          .static-maps-container {
+            grid-template-columns: 1fr;
+          }
+        }
+        .main-content {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+        .map-section {
+          background: #ffffff;
+          padding: 1.5rem;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .filter-block {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+          background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+          border-radius: 8px;
+          margin-bottom: 1.5rem;
+          flex-wrap: wrap;
+          border: 1px solid #e2e8f0;
+        }
+        .info-section {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .state-info, .rankings-info {
+          background: #ffffff;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .map-controls {
+          position: absolute;
+          top: 70px;
+          right: 20px;
+          background: rgba(255, 255, 255, 0.95);
+          padding: 12px 16px;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          z-index: 5;
+          backdrop-filter: blur(4px);
+        }
+        .map-control-title {
+          margin: 0 0 10px 0;
+          font-size: 13px;
+          font-weight: 700;
+          color: #2d3748;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-bottom: 2px solid #60a5fa;
+          padding-bottom: 6px;
+        }
+        .toggle-map-btn {
+          margin-top: 1rem;
+          padding: 0.75rem 1.5rem;
+          background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 1rem;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .toggle-map-btn:hover {
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(96, 165, 250, 0.4);
+        }
+        @media (max-width: 1024px) {
+          .info-section {
+            grid-template-columns: 1fr;
+          }
+          .filter-block {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .filter-block .label {
+            margin-top: 0.5rem;
+          }
+        }
+      `}</style>
       {/* Header */}
-      <header className="header">
+      <header className="header scorecard-header">
         <div className="title-block">
           <h1 className="title">Drone Commerce Scorecard 2025</h1>
           <p className="subtitle">Comparison of State Readiness & Regulations</p>
@@ -432,15 +568,16 @@ const scoreTextLayer2025 = useMemo(() => ({
       <div className="static-maps-container">
         <div className="map-container">
           <div className="map-header">
-            <h3 className="map-title">2023 Overall Score</h3>
+            <h3 className="map-title">2023 State Rankings</h3>
             <span className="badge badge-neutral">Historical Data</span>
           </div>
           {geoData && (
             <>
               <Map
-                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
+                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3.5 }}
                 mapStyle="mapbox://styles/mapbox/light-v10"
                 mapboxAccessToken={MAPBOX_TOKEN}
+                maxBounds={[[-170, 15], [-50, 72]]}
                 attributionControl={false}
                 interactiveLayerIds={["state-fills-2023"]}
                 onMouseMove={(e) => {
@@ -457,42 +594,60 @@ const scoreTextLayer2025 = useMemo(() => ({
               </Map>
               {hoverInfo2023 && (
                 <div className="tooltip" style={{ left: hoverInfo2023.x + 10, top: hoverInfo2023.y + 10 }}>
-                  <strong>{hoverInfo2023.feature.properties.name}</strong>
+                  <strong>{hoverInfo2023.feature.properties.name}</strong><br />
+                  <div style={{ borderBottom: '1px solid rgba(255,255,255,0.3)', paddingBottom: '4px', marginBottom: '4px' }}>
+                    <b>2023:</b> Rank #{hoverInfo2023.feature.properties.rank_2023} | Score: {hoverInfo2023.feature.properties.drone_score_2023}
+                  </div>
+                  <div style={{ color: '#d3d3d3' }}>
+                    <b>2025:</b> Rank #{hoverInfo2023.feature.properties.rank_2025} | Score: {hoverInfo2023.feature.properties.drone_score_2025}
+                  </div>
+                  {(() => {
+                    const rankChange = hoverInfo2023.feature.properties.rank_2023 - hoverInfo2023.feature.properties.rank_2025;
+                    const scoreChange = hoverInfo2023.feature.properties.drone_score_2025 - hoverInfo2023.feature.properties.drone_score_2023;
+                    if (rankChange > 0) {
+                      return <div style={{ color: '#90EE90', marginTop: '4px' }}>↑ Improved {rankChange} ranks | +{scoreChange.toFixed(1)} pts</div>;
+                    } else if (rankChange < 0) {
+                      return <div style={{ color: '#FFB6C6', marginTop: '4px' }}>↓ Dropped {Math.abs(rankChange)} ranks | {scoreChange.toFixed(1)} pts</div>;
+                    } else {
+                      return <div style={{ color: '#FFFACD', marginTop: '4px' }}>→ Same rank | {scoreChange.toFixed(1)} pts</div>;
+                    }
+                  })()}
                 </div>
               )}
             </>
           )}
           <div className="map-legend">
             <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
-              <div className="legend-label">Low</div>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
-              <div className="legend-label">Medium </div>
+              <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
+              <div className="legend-label">Top Tier (Rank 1–10)</div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#68d391" }}></div>
-              <div className="legend-label">High </div>
+              <div className="legend-label">Strong (Rank 11–20)</div>
             </div>
             <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
-              <div className="legend-label">Excellent</div>
+              <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
+              <div className="legend-label">Mid (Rank 21–35)</div>
+            </div>
+            <div className="legend-item">
+              <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
+              <div className="legend-label">Lagging (Rank 36–50)</div>
             </div>
           </div>
         </div>
 
         <div className="map-container">
           <div className="map-header">
-            <h3 className="map-title">2025 Overall Score</h3>
+            <h3 className="map-title">2025 State Rankings</h3>
             <span className="badge badge-positive">Current Data</span>
           </div>
           {geoData && (
             <>
               <Map
-                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
+                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3.5 }}
                 mapStyle="mapbox://styles/mapbox/light-v10"
                 mapboxAccessToken={MAPBOX_TOKEN}
+                maxBounds={[[-170, 15], [-50, 72]]}
                 attributionControl={false}
                 interactiveLayerIds={["state-fills-2025"]}
                 onMouseMove={(e) => {
@@ -509,27 +664,44 @@ const scoreTextLayer2025 = useMemo(() => ({
               </Map>
               {hoverInfo2025 && (
                 <div className="tooltip" style={{ left: hoverInfo2025.x + 10, top: hoverInfo2025.y + 10 }}>
-                  <strong>{hoverInfo2025.feature.properties.name}</strong>
+                  <strong>{hoverInfo2025.feature.properties.name}</strong><br />
+                  <div style={{ borderBottom: '1px solid rgba(255,255,255,0.3)', paddingBottom: '4px', marginBottom: '4px' }}>
+                    <b>2025:</b> Rank #{hoverInfo2025.feature.properties.rank_2025} | Score: {hoverInfo2025.feature.properties.drone_score_2025}
+                  </div>
+                  <div style={{ color: '#d3d3d3' }}>
+                    <b>2023:</b> Rank #{hoverInfo2025.feature.properties.rank_2023} | Score: {hoverInfo2025.feature.properties.drone_score_2023}
+                  </div>
+                  {(() => {
+                    const rankChange = hoverInfo2025.feature.properties.rank_2023 - hoverInfo2025.feature.properties.rank_2025;
+                    const scoreChange = hoverInfo2025.feature.properties.drone_score_2025 - hoverInfo2025.feature.properties.drone_score_2023;
+                    if (rankChange > 0) {
+                      return <div style={{ color: '#90EE90', marginTop: '4px' }}>↑ Improved {rankChange} ranks | +{scoreChange.toFixed(1)} pts</div>;
+                    } else if (rankChange < 0) {
+                      return <div style={{ color: '#FFB6C6', marginTop: '4px' }}>↓ Dropped {Math.abs(rankChange)} ranks | {scoreChange.toFixed(1)} pts</div>;
+                    } else {
+                      return <div style={{ color: '#FFFACD', marginTop: '4px' }}>→ Same rank | {scoreChange.toFixed(1)} pts</div>;
+                    }
+                  })()}
                 </div>
               )}
             </>
           )}
           <div className="map-legend">
             <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
-              <div className="legend-label">Low</div>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
-              <div className="legend-label">Medium</div>
+              <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
+              <div className="legend-label">Top Tier (Rank 1–10)</div>
             </div>
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#68d391" }}></div>
-              <div className="legend-label">High</div>
+              <div className="legend-label">Strong (Rank 11–20)</div>
             </div>
             <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
-              <div className="legend-label">Excellent</div>
+              <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
+              <div className="legend-label">Mid (Rank 21–35)</div>
+            </div>
+            <div className="legend-item">
+              <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
+              <div className="legend-label">Lagging (Rank 36–50)</div>
             </div>
           </div>
         </div>
@@ -539,31 +711,48 @@ const scoreTextLayer2025 = useMemo(() => ({
       <div className="main-content">
         {/* Map Section - Full Width */}
         <div className="map-section">
+          <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.5rem', color: '#1a365d', fontWeight: '700' }}>Interactive Analysis</h3>
           <div className="filter-block">
-            <span className="label">Filter by State:</span>
-            <select
-              className="select"
-              value={selectedFeature?.properties?.name || ""}
-              onChange={(e) => handleSelectState(e.target.value)}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 300px' }}>
+              <span className="label" style={{ whiteSpace: 'nowrap' }}>Filter by State:</span>
+              <select
+                className="select"
+                value={selectedFeature?.properties?.name || ""}
+                onChange={(e) => handleSelectState(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value="">Select a State...</option>
+                {geoData?.features.map(f => (
+                  <option key={f.properties.name} value={f.properties.name}>{f.properties.name}</option>
+                ))}
+              </select>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 300px' }}>
+              <span className="label" style={{ whiteSpace: 'nowrap' }}>Select Factor:</span>
+              <select
+                className="select"
+                value={selectedFactor}
+                onChange={(e) => setSelectedFactor(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                {factorOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+            <button 
+              className="toggle-map-btn"
+              onClick={() => setShowMap(!showMap)}
             >
-              <option value="">Select a State...</option>
-              {geoData?.features.map(f => (
-                <option key={f.properties.name} value={f.properties.name}>{f.properties.name}</option>
-              ))}
-            </select>
-            <span className="label">Select Factor:</span>
-            <select
-              className="select"
-              value={selectedFactor}
-              onChange={(e) => setSelectedFactor(e.target.value)}
-            >
-              {factorOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
+              {showMap ? '🗺️ Hide Map' : '🗺️ Show Map'}
+            </button>
           </div>
           {showMap && (
-            <div className="map-container" style={{ height: '400px' }}>
+            <div className="map-container" style={{ height: '550px', marginTop: '1rem' }}>
+            <div className="map-header">
+              <h3 className="map-title">{factorOptions.find(opt => opt.value === selectedFactor)?.label || 'Overall Score'} by State</h3>
+              <span className="badge badge-positive">Interactive</span>
+            </div>
             {loading && (
               <div className="loading-overlay">
                 <div className="loading-spinner"></div>
@@ -578,9 +767,10 @@ const scoreTextLayer2025 = useMemo(() => ({
             {geoData && (
               <Map
                 ref={mapRef}
-                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3 }}
+                initialViewState={{ longitude: -96, latitude: 37.8, zoom: 3.5 }}
                 mapStyle="mapbox://styles/mapbox/light-v10"
                 mapboxAccessToken={MAPBOX_TOKEN}
+                maxBounds={[[-170, 15], [-50, 72]]}
                 interactiveLayerIds={["state-fills"]}
                 onMouseMove={(e) => {
                   const f = e.features?.[0];
@@ -606,25 +796,15 @@ const scoreTextLayer2025 = useMemo(() => ({
               </Map>
             )}
 
-            {/* Map Controls - Moved onto the map */}
+            {/* Map Legend */}
             <div className="map-controls">
               <h4 className="map-control-title">Interactive Map</h4>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: "#e53e3e" }}></div>
-                <div className="legend-label">Low</div>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: "#f6e05e" }}></div>
-                <div className="legend-label">Medium</div>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: "#68d391" }}></div>
-                <div className="legend-label">High</div>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: "#38a169" }}></div>
-                <div className="legend-label">Excellent</div>
-              </div>
+              {legendScale.map(item => (
+                <div className="legend-item" key={item.label}>
+                  <div className="legend-color" style={{ backgroundColor: item.color }}></div>
+                  <div className="legend-label">{item.label}</div>
+                </div>
+              ))}
             </div>
             </div>
           )}
@@ -698,44 +878,44 @@ const scoreTextLayer2025 = useMemo(() => ({
           </div>
 
           {/* Rankings Panel */}
-          <div className="rankings-info">
-            <div className="card">
-              <h3 className="score-label" style={{ marginBottom: "15px" }}>State Rankings (2025)</h3>
-              <div className="table-container">
-                <table className="table">
-                  <thead className="table-header">
-                    <tr>
-                      <th className="table-header-cell">Rank</th>
-                      <th className="table-header-cell">State</th>
-                      <th className="table-header-cell" style={{ textAlign: "right" }}>Score</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {geoData?.features
-                      .filter(f => f.properties.drone_score_2025 != null)
-                      .sort((a, b) => (b.properties.drone_score_2025 || 0) - (a.properties.drone_score_2025 || 0))
-                      .map((f, index) => (
-                        <tr
-                          key={f.properties.name}
-                          className="table-row"
-                          style={{
-                            backgroundColor: f.properties.name === selectedFeature?.properties?.name ? "#edf2f7" : "transparent",
-                            fontWeight: f.properties.name === selectedFeature?.properties?.name ? "600" : "normal"
-                          }}
-                        >
-                          <td className="table-cell">
-                            {index + 1}
-                            {index + 1 === 1 && <span style={{ marginLeft: "4px" }}>🥇</span>}
-                            {index + 1 === 2 && <span style={{ marginLeft: "4px" }}>🥈</span>}
-                            {index + 1 === 3 && <span style={{ marginLeft: "4px" }}>🥉</span>}
-                          </td>
-                          <td className="table-cell">{f.properties.name}</td>
-                          <td className="table-cell" style={{ textAlign: "right" }}>{f.properties.drone_score_2025}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
+          <div className="card">
+            <h3 className="score-label" style={{ marginBottom: "15px" }}>State Rankings (2025)</h3>
+            <div className="table-container" style={{ maxHeight: '600px', overflowY: 'auto', overflowX: 'hidden' }}>
+              <table className="table">
+                <thead className="table-header">
+                  <tr>
+                    <th className="table-header-cell">Rank</th>
+                    <th className="table-header-cell">State</th>
+                    <th className="table-header-cell" style={{ textAlign: "right" }}>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {geoData?.features
+                    .filter(f => f.properties.drone_score_2025 != null)
+                    .sort((a, b) => (b.properties.drone_score_2025 || 0) - (a.properties.drone_score_2025 || 0))
+                    .map((f, index) => (
+                      <tr
+                        key={f.properties.name}
+                        className="table-row"
+                        onClick={() => handleSelectState(f.properties.name)}
+                        style={{
+                          cursor: "pointer",
+                          backgroundColor: f.properties.name === selectedFeature?.properties?.name ? "#edf2f7" : "transparent",
+                          fontWeight: f.properties.name === selectedFeature?.properties?.name ? "600" : "normal"
+                        }}
+                      >
+                        <td className="table-cell">
+                          {index + 1}
+                          {index + 1 === 1 && <span style={{ marginLeft: "4px" }}>🥇</span>}
+                          {index + 1 === 2 && <span style={{ marginLeft: "4px" }}>🥈</span>}
+                          {index + 1 === 3 && <span style={{ marginLeft: "4px" }}>🥉</span>}
+                        </td>
+                        <td className="table-cell">{f.properties.name}</td>
+                        <td className="table-cell" style={{ textAlign: "right" }}>{f.properties.drone_score_2025}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

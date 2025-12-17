@@ -253,7 +253,7 @@ table tbody tr:last-child {
 /* Map container styles */
 .map-container {
   position: relative;
-  height: 300px;
+  height: 500px;
   width: 100%;
   border-radius: 12px;
   overflow: hidden;
