@@ -96,11 +96,11 @@ export default function SectionF({ inputs }) {
           <div key={index} >
             <h3 >{type.name}</h3>
             <label >
-              km
+              total length in km
               <input
                 type="number"
                 value={type.km}
-                onChange={e => handleChange(index, "total length in km", e.target.value)}
+                onChange={e => handleChange(index, "km", e.target.value)}
                 
               />
             </label>
@@ -215,4 +215,3 @@ export default function SectionF({ inputs }) {
     </section>
   );
 }
-
