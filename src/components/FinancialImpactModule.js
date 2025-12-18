@@ -325,30 +325,42 @@ export default function FinancialImpactModule() {
       )}
 
 
-      {showResults && showDetails && (
-        <div style={{ marginBottom: 16 }}>
-          <h4 style={{ marginBottom: 8 }}>Detailed Calculations — {bound === "low" ? "Lower" : "Upper"} Bound</h4>
-          <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 6, overflow: "hidden" }}>
-            <tbody>
-              {[
-                ["Delivery Revenue", bound === "low" ? Rev_Flight_Delivery_Low : Rev_Flight_Delivery_High],
-                ["UAM Revenue", bound === "low" ? Rev_Flight_UAM_Low : Rev_Flight_UAM_High],
-                ["Inspection Revenue", bound === "low" ? Rev_Flight_Insp_Low : Rev_Flight_Insp_High],
-                ["Recreational Revenue", bound === "low" ? Rev_Flight_Rec_Low : Rev_Flight_Rec_High],
-                ["Total Flight Fees", bound === "low" ? Total_Flight_Fees_Low : Total_Flight_Fees_High],
-                ["Total Permit Fees", bound === "low" ? Total_Permits_Low : Total_Permits_High],
-                ["Grand Total (Market)", bound === "low" ? Grand_Total_Low : Grand_Total_High],
-                
-              ].map(([label, val]) => (
-                <tr key={label}>
-                  <td style={{ padding: 8 }}>{label}</td>
-                  <td style={{ padding: 8, textAlign: "right" }}></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+{showResults && showDetails && (
+  <div style={{ marginBottom: 16 }}>
+    <h4 style={{ marginBottom: 8 }}>
+      Detailed Calculations — {bound === "low" ? "Lower" : "Upper"} Bound
+    </h4>
+
+    <table
+      style={{
+        width: "100%",
+        borderCollapse: "collapse",
+        background: "#fff",
+        borderRadius: 6,
+        overflow: "hidden",
+      }}
+    >
+      <tbody>
+        {[
+          ["Delivery Revenue", bound === "low" ? Rev_Flight_Delivery_Low : Rev_Flight_Delivery_High],
+          ["UAM Revenue", bound === "low" ? Rev_Flight_UAM_Low : Rev_Flight_UAM_High],
+          ["Inspection Revenue", bound === "low" ? Rev_Flight_Insp_Low : Rev_Flight_Insp_High],
+          ["Recreational Revenue", bound === "low" ? Rev_Flight_Rec_Low : Rev_Flight_Rec_High],
+          ["Total Flight Fees", bound === "low" ? Total_Flight_Fees_Low : Total_Flight_Fees_High],
+          ["Total Permit Fees", bound === "low" ? Total_Permits_Low : Total_Permits_High],
+          ["Grand Total (Market)", bound === "low" ? Grand_Total_Low : Grand_Total_High],
+        ].map(([label, val]) => (
+          <tr key={label}>
+            <td style={{ padding: 8 }}>{label}</td>
+            <td style={{ padding: 8, textAlign: "right", fontWeight: 500 }}>
+              {fmtCurrency(val)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
 
       {showResults && (
