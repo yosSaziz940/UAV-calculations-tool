@@ -76,7 +76,7 @@ export default function SectionE() {
     <section className="card">
       <h2>E. Agriculture Use</h2>
       <div className="grid">
-        {["agricultureLand", "cropland", "forests/Parks"].map(section => (
+        {["agricultureLand", "cropland", "forestParks"].map(section => (
           <div key={section}>
             <h3 style={{ textTransform: 'capitalize', marginBottom: '0.5rem' }}>{section.replace(/([A-Z])/g, ' $1')}</h3>
             <label>
@@ -152,4 +152,3 @@ export default function SectionE() {
     </section>
   );
 }
-
