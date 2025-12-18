@@ -111,7 +111,7 @@ export default function SectionH({ inputs }) {
         </label>
 
         <label>
-          Average % of Events Served per UAV (H11)
+          Average % of Events Served per UAV
           <input type="number" value={emergencyData.avgEventServedPct} onChange={e => handleInputChange("avgEventServedPct", e.target.value)} />
         </label>
 
@@ -205,3 +205,4 @@ export default function SectionH({ inputs }) {
     </section>
   );
 }
+
